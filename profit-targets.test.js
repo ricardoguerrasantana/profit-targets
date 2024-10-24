@@ -1,16 +1,10 @@
 const { stockPairs } = require("./profit-targets")
 
 describe("stockPairs", () => {
-  test("Test case 0", () => {
-    const stocksProfit = [1, 3, 46, 1, 3, 9]
-    const target = 47
+  test("Overlapping Pairs", () => {
+    const stocksProfit = [5, 7, 5, 7, 5]
+    const target = 12
     expect(stockPairs(stocksProfit, target)).toStrictEqual(1)
-  })
-
-  test("Test case 2", () => {
-    const stocksProfit = [12, 3, 9, 3, 5, 1, 12]
-    const target = 6
-    expect(stockPairs(stocksProfit, target)).toStrictEqual(2)
   })
 
   test("Basic test case with distinct pairs", () => {
