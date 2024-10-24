@@ -1,14 +1,20 @@
 function stockPairs(stocksProfit, target) {
-  let seenSets = new Set()
+  let seen = new Set()
+  let used = new Set()
+  let distinctPairsCount = 0
 
   for (let i = 0; i < stocksProfit.length; i++) {
-    for (let j = i + 1; j < stocksProfit.length; j++) {
-      if (stocksProfit[i] + stocksProfit[j] === target) {
-        seenSets.add([stocksProfit[i], stocksProfit[j]].sort((a, b) => a - b).join(','))
-      }
+    const profit = stocksProfit[i]
+    const difference = target - profit;
+    if (seen.has(difference) && !used.has(difference) && !used.has(profit)) {
+      distinctPairsCount++
+      used.add(difference)
+      used.add(profit)
     }
+    seen.add(profit)
   }
-  return seenSets.size
+
+  return distinctPairsCount
 }
 
 module.exports = {
