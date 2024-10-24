@@ -10,7 +10,7 @@ describe("stockPairs", () => {
   test("Test case 2", () => {
     const stocksProfit = [12, 3, 9, 3, 5, 1, 12]
     const target = 6
-    expect(stockPairs(stocksProfit, target)).toStrictEqual(1)
+    expect(stockPairs(stocksProfit, target)).toStrictEqual(2)
   })
 
   test("Basic test case with distinct pairs", () => {
