@@ -1,20 +1,18 @@
 function stockPairs(stocksProfit, target) {
-  let seen = new Set() // To store all seen profits
-  let used = new Set() // To track profits already used in pairs
+  let seen = new Set(stocksProfit) // Contains all possible profits for quick lookup
+  let used = new Set() // Tracks profits that have already been used in counted pairs
   let distinctPairsCount = 0
 
   for (let i = 0; i < stocksProfit.length; i++) {
     const profit = stocksProfit[i]
     const difference = target - profit
 
-    // Check if the complement exists in seen and both values haven't been used
+    // Check if 'difference' exists in 'seen' and if neither value has been used in a pair
     if (seen.has(difference) && !used.has(profit) && !used.has(difference)) {
-      distinctPairsCount++ // Found a valid pair
-      used.add(difference) // Mark both as used
-      used.add(profit)
+      distinctPairsCount++ // Increment count for a valid, distinct pair
+      used.add(difference) // Mark 'difference' as used
+      used.add(profit) // Mark 'profit' as used
     }
-
-    seen.add(profit) // Mark this profit as seen
   }
 
   return distinctPairsCount
