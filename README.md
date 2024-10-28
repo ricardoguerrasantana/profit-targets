@@ -1,103 +1,112 @@
-# Stock Profit Pairs
+# The Profit Targets Problem
+This repository provides an efficient JavaScript solution to the **Profit Targets** problem, a common coding challenge that involves finding distinct pairs in an array whose sums equal a given target. This solution leverages hash sets for constant-time lookups, ensuring scalability even with large datasets.
 
-This repository contains a JavaScript solution to the **"Profit Targets"** coding problem. The goal of the problem is to find the number of distinct pairs of stocks whose yearly profits sum up to a given target.
+This repository includes both a **brute-force approach** and an **optimized solution**. For a deeper understanding of the solution, you can read the accompanying [Medium article](https://medium.com/@santana.r/02b2ade9f874).
 
-## Problem Description
+## Getting Started
 
-A financial analyst is responsible for a portfolio of profitable stocks represented in an array. Each item in the array represents the yearly profit of a corresponding stock. The analyst gathers all distinct pairs of stocks that reached the target profit. Distinct pairs are pairs that differ in at least one element.
+### Clone the Repository
 
-Given an array `stocksProfit`, the task is to find the number of distinct pairs where the sum of each pair's profits is exactly equal to the target profit.
+To clone this repository, use the following command:
+
+```bash
+git clone https://github.com/ricardoguerrasantana/profit-targets.git
+cd profit-targets
+```
+
+### Installation
+
+Ensure you have Node.js installed, then install dependencies with:
+
+```bash
+npm install
+```
+
+## Example Usage
+
+To use the optimized solution:
+
+```javascript
+const { stockPairs } = require('./optimized-solution/profit-targets');
+
+const stocksProfit = [5, 7, 9, 13, 11, 6, 6, 3, 3];
+const target = 12;
+console.log(stockPairs(stocksProfit, target)); // Expected output: 3
+```
+
+## Running Tests
+
+This project includes tests for both the brute-force and optimized solutions. Run tests with:
+
+```bash
+npm test
+```
+
+## Problem Overview
+
+Given an array of stock profits, the goal is to find **distinct pairs of stocks** that add up to a specified target. A pair is considered distinct if both profits come from different stock entries, even if they share the same values. Order does not matter, so (5,7) and (7,5) are the same pair.
 
 ### Example
 
 ```javascript
-stocksProfit = [5, 7, 9, 13, 11, 6, 6, 3, 3]
-target = 12
+stocksProfit = [5, 7, 9, 13, 11, 6, 6, 3, 3];
+target = 12;
 ```
 
-- **Output**: `3`
-
-**Explanation**: There are 3 distinct pairs:
-
-- (5, 7)
-- (3, 9)
-- (6, 6)
+Output:
+- Distinct pairs: (5, 7), (3, 9), and (6, 6)
+- Result: `3` pairs
 
 ### Constraints
 
-- $1 <= n <= 5 × 10^5$
-- $0 <= stocksProfit[i] <= 10^9$
-- $0 <= target <= 5 × 10^9$
+- **1 ≤ n ≤ 5×10⁵**
+- **0 ≤ stocksProfit[i] ≤ 10⁹**
+- **0 ≤ target ≤ 5×10⁹**
 
-## Solution
+## Solution Explanation
 
-### Approach
+To solve this problem optimally, the solution uses **two hash sets**:
+1. **seen**: Tracks profits we’ve encountered.
+2. **used**: Ensures each unique pair is only counted once.
 
-We solve the problem using a **Set** to track seen profits and avoid counting duplicates. The algorithm runs in linear time O(n), making it efficient for large inputs.
+By calculating the required complement for each profit (`difference = target - profit`), we can efficiently identify and count valid pairs without duplication.
 
-### JavaScript Solution
+### Optimized JavaScript Code
 
 ```javascript
-function stockPairs(stocksProfit, target) {
-  let seen = new Set()
-  let used = new Set()
-  let count = 0
-
-  for (let i = 0; i < stocksProfit.length; i++) {
-    let complement = target - stocksProfit[i]
-
-    if (
-      seen.has(complement) &&
-      !used.has(complement) &&
-      !used.has(stocksProfit[i])
-    ) {
-      count++
-      used.add(complement)
-      used.add(stocksProfit[i])
-    }
-
-    seen.add(stocksProfit[i])
-  }
-
-  return count
+function stockPairs(stocksProfit, target) {  
+  let seen = new Set();  
+  let used = new Set();  
+  let distinctPairsCount = 0;  
+  
+  for (let i = 0; i < stocksProfit.length; i++) {  
+    const profit = stocksProfit[i];  
+    const difference = target - profit;  
+  
+    if (seen.has(difference) && !used.has(profit) && !used.has(difference)) {  
+      distinctPairsCount++;  
+      used.add(difference);  
+      used.add(profit);  
+    }  
+  
+    seen.add(profit);  
+  }  
+  
+  return distinctPairsCount;  
 }
 ```
 
-### How It Works
+### Steps
 
-1. **Set Usage**: We use two sets:
-   - `seen`: To keep track of the profits we've encountered.
-   - `used`: To make sure we don't count the same pair multiple times.
-2. **Complement Calculation**: For each stock profit, we calculate the complement that would sum to the target. If the complement has already been seen, and the pair hasn't been used, we count it as a valid pair.
+1. **Initialize Sets**: Create `seen` and `used` to track encountered and used profits.
+2. **Loop Through Array**: For each profit, calculate its complement. If both values haven’t been used and the complement is in `seen`, increment the pair count and mark them as used.
+3. **Return Result**: Output the total count of distinct pairs.
 
-3. **Time Complexity**: The solution runs in O(n), where `n` is the number of elements in the `stocksProfit` array, which ensures efficiency even with large inputs.
+## Complexity
 
-## How to Run
+- **Time Complexity**: `O(n)` – We traverse the array once, and set operations (`add`, `has`) are `O(1)`.
+  
+## Edge Cases
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/ricardoguerrasantana/profit-targets.git
-   cd profit-targets
-   ```
-
-2. Run the solution:
-
-   - You can test the solution by running the function in a JavaScript environment like Node.js or in the browser's console.
-
-3. Example usage:
-
-   ```javascript
-   const stocksProfit = [1, 3, 46, 1, 3, 9]
-   const target = 47
-
-   console.log(stockPairs(stocksProfit, target)) // Output: 1
-   ```
-
-## License
-
-This project is licensed under the MIT License.
-
-## Contributions
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/ricardoguerrasantana/profit-targets/issues) if you want to contribute.
+1. **Duplicate Values**: Ensures duplicate pairs are not double-counted.
+2. **No Valid Pairs**: If no pairs sum to the target, the function returns `0`.
